@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project — Colin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .project-page {
+            padding-top: calc(52px + 5rem);
+            padding-bottom: var(--space-2xl);
+        }
+
+        .project-header {
+            margin-bottom: var(--space-lg);
+        }
+
+        .project-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 14px;
+            color: var(--color-gray-500);
+            margin-bottom: 2rem;
+            transition: color var(--transition-fast);
+        }
+
+        .project-back:hover {
+            color: var(--color-black);
+        }
+
+        .project-back svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .project-page-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .project-page-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-page-date {
+            font-size: 14px;
+            color: var(--color-gray-500);
+        }
+
+        .project-page-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .project-body {
+            max-width: var(--max-width-narrow);
+        }
+
+        .project-body h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-black);
+        }
+
+        .project-body p {
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-gray-700);
+            margin-bottom: 1.25rem;
+        }
+
+        .project-body ul {
+            list-style: none;
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+        }
+
+        .project-body li {
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-gray-700);
+            padding-left: 1.25rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-body li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: var(--color-gray-300);
+        }
+
+        .project-body code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            background-color: var(--color-gray-100);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+        }
+
+        .project-body pre {
+            background-color: var(--color-gray-100);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <nav class="nav" aria-label="Main navigation">
+            <div class="nav-left">
+                <a href="../index.html" class="nav-name">Colin Mattéo</a>
+                <a href="../index.html#about" class="nav-link">About</a>
+                <a href="../projects.html" class="nav-link">Projects</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-right">
+                <a href="../assets/CV_Matteo_Colin.pdf" class="nav-link" target="_blank" rel="noopener noreferrer">CV</a>
+                <a href="https://github.com/V0H6P" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/mattéo-colin-82a244336" class="nav-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="project-page">
+        <div class="container container--narrow">
+            <a href="../projects.html" class="project-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Projects
+            </a>
+
+            <header class="project-header">
+                <h1 class="project-page-title">Statistical Arbitrage Engine</h1>
+                <div class="project-page-meta">
+                    <span class="project-page-date">September 2024</span>
+                </div>
+                <div class="project-page-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Kalman Filter</span>
+                    <span class="tech-tag">Cointegration</span>
+                    <span class="tech-tag">Backtesting</span>
+                </div>
+            </header>
+
+            <div class="project-body">
+                <h2>Overview</h2>
+                <p>This project implements a cointegration-based pairs trading strategy with dynamic hedge ratio estimation using the Kalman filter. The system identifies statistically co-moving asset pairs and exploits temporary divergences from equilibrium relationships.</p>
+
+                <h2>Methodology</h2>
+                <p>The strategy operates in three distinct phases: pair identification through Engle-Granger cointegration testing, dynamic hedge ratio estimation via a state-space model, and signal generation based on z-score thresholds of the spread residuals.</p>
+                <ul>
+                    <li>Cointegration testing with Augmented Dickey-Fuller and Johansen procedures</li>
+                    <li>Kalman filter for online hedge ratio estimation with time-varying parameters</li>
+                    <li>Adaptive z-score thresholds calibrated to rolling volatility</li>
+                    <li>Transaction cost modeling including slippage, commissions, and market impact</li>
+                </ul>
+
+                <h2>Implementation</h2>
+                <p>The system is implemented in Python with a modular architecture separating data ingestion, signal generation, position management, and risk controls. Key components include:</p>
+<pre><code>class KalmanHedgeRatio:
+    def __init__(self, delta=1e-4, ve=1e-3):
+        self.delta = delta
+        self.ve = ve
+        self.theta = np.zeros(2)
+        self.P = np.eye(2)
+        self.R = np.zeros((2, 2))
+
+    def update(self, x, y):
+        F = np.array([[x, 1.0]])
+        self.R = self.P + self.delta * np.eye(2)
+        yhat = F @ self.theta
+        et = y - yhat
+        Qt = F @ self.R @ F.T + self.ve
+        Kt = self.R @ F.T / Qt
+        self.theta = self.theta + (Kt * et).flatten()
+        self.P = self.R - Kt @ F @ self.R
+        return self.theta[0], et, Qt</code></pre>
+
+                <h2>Results</h2>
+                <p>Backtested on US equity data from 2010 to 2024, the strategy achieves a Sharpe ratio of 1.84 with maximum drawdown of 8.2%. The Kalman filter approach demonstrates significant improvement over static OLS hedge ratios, particularly during regime transitions.</p>
+                <ul>
+                    <li>Annualized return: 12.3%</li>
+                    <li>Sharpe ratio: 1.84</li>
+                    <li>Maximum drawdown: 8.2%</li>
+                    <li>Win rate: 61.4%</li>
+                    <li>Average holding period: 4.7 days</li>
+                </ul>
+
+                <h2>Key Findings</h2>
+                <p>The adaptive hedge ratio significantly reduces drawdowns during structural breaks compared to rolling-window OLS estimation. The Kalman filter's ability to weight recent observations more heavily provides faster adaptation to changing market conditions while maintaining numerical stability.</p>
+                <p>Future work includes extending the framework to multi-asset cointegration using the Johansen procedure and incorporating transaction cost optimization in the signal generation layer.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="footer-name">Colin Mattéo</p>
+                    <p class="footer-email"><a href="mailto:matteo.colin@telecom-paris.fr">matteo.colin@telecom-paris.fr</a></p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/V0H6P" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://www.linkedin.com/in/mattéo-colin-82a244336" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Colin. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
