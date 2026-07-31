@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN Trading Bot — Colin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .project-page {
+            padding-top: calc(52px + 5rem);
+            padding-bottom: var(--space-2xl);
+        }
+
+        .project-header {
+            margin-bottom: var(--space-lg);
+        }
+
+        .project-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 14px;
+            color: var(--color-gray-500);
+            margin-bottom: 2rem;
+            transition: color var(--transition-fast);
+        }
+
+        .project-back:hover {
+            color: var(--color-black);
+        }
+
+        .project-back svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .project-page-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .project-page-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-page-date {
+            font-size: 14px;
+            color: var(--color-gray-500);
+        }
+
+        .project-page-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .project-body {
+            max-width: var(--max-width-narrow);
+        }
+
+        .project-body h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-black);
+        }
+
+        .project-body h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-black);
+        }
+
+        .project-body p {
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-gray-700);
+            margin-bottom: 1.25rem;
+        }
+
+        .project-body ul {
+            list-style: none;
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+        }
+
+        .project-body li {
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-gray-700);
+            padding-left: 1.25rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-body li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: var(--color-gray-300);
+        }
+
+        .project-body code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            background-color: var(--color-gray-100);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+        }
+
+        .project-body pre {
+            background-color: var(--color-gray-100);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .project-figure {
+            margin: 2rem 0;
+        }
+
+        .project-figure img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--color-gray-200);
+        }
+
+        .project-figure figcaption {
+            font-size: 0.9rem;
+            color: var(--color-gray-500);
+            margin-top: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .indicator-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .indicator-table th,
+        .indicator-table td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .indicator-table th {
+            font-weight: 600;
+            color: var(--color-black);
+            background-color: var(--color-gray-100);
+        }
+
+        .indicator-table td {
+            color: var(--color-gray-700);
+        }
+
+        .label-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .label-table th,
+        .label-table td {
+            padding: 0.6rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .label-table th {
+            font-weight: 600;
+            color: var(--color-black);
+            background-color: var(--color-gray-100);
+        }
+
+        .label-table td {
+            color: var(--color-gray-700);
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <nav class="nav" aria-label="Main navigation">
+            <div class="nav-left">
+                <a href="../index.html" class="nav-name">Colin Mattéo</a>
+                <a href="../index.html#about" class="nav-link">About</a>
+                <a href="../projects.html" class="nav-link">Projects</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-right">
+                <a href="../assets/CV_Matteo_Colin.pdf" class="nav-link" target="_blank" rel="noopener noreferrer">CV</a>
+                <a href="https://github.com/V0H6P" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/mattéo-colin-82a244336" class="nav-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="project-page">
+        <div class="container container--narrow">
+            <a href="../projects.html" class="project-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Projects
+            </a>
+
+            <header class="project-header">
+                <h1 class="project-page-title">CNN-Based BTCUSDT Trading System</h1>
+                <div class="project-page-meta">
+                    <span class="project-page-date">March 2026</span>
+                </div>
+                <div class="project-page-tech">
+                    <span class="tech-tag">PyTorch</span>
+                    <span class="tech-tag">CNN</span>
+                    <span class="tech-tag">Technical Analysis</span>
+                    <span class="tech-tag">Binance API</span>
+                    <span class="tech-tag">MySQL</span>
+                    <span class="tech-tag">Backtesting</span>
+                </div>
+            </header>
+
+            <div class="project-body">
+                <h2>Project Overview</h2>
+                <p>This project implements an end-to-end automated trading system for BTCUSDT on Binance. The core idea is to encode market state as a grayscale image — a 15&times;15 matrix where rows represent time steps and columns represent normalized technical indicators — and to train a convolutional neural network to classify each image into one of three actions: HOLD, SELL, or BUY.</p>
+                <p>The system covers the full pipeline: historical data collection and storage in MySQL, feature engineering with 15 technical indicators, image construction, CNN training with class balancing, backtesting against a Buy &amp; Hold benchmark, and live inference on 15-minute candles via the Binance REST API.</p>
+
+                <h2>Data Pipeline</h2>
+
+                <h3>Historical Data Collection</h3>
+                <p>Historical OHLCV candles are downloaded from the Binance API using the <code>python-binance</code> library and stored in a local MySQL database. The script handles deduplication by querying existing timestamps before insertion, preventing data corruption when re-running.</p>
+                <p>Three tables are maintained at different temporal resolutions:</p>
+                <ul>
+                    <li><code>btcusdt</code> — 1-minute candles</li>
+                    <li><code>btcusdt_15min</code> — 15-minute candles (primary resolution for CNN training)</li>
+                    <li><code>btcusdt_1h</code> — 1-hour candles</li>
+                </ul>
+                <p>The training data spans approximately September 2024 to January 2026, representing over 40,000 15-minute candles. Data access is handled through SQLAlchemy with parameterized date-range queries.</p>
+
+                <h3>Real-Time Data Acquisition</h3>
+                <p>For live inference, a dedicated module queries the Binance public REST API endpoint <code>/api/v3/klines</code>. It requests the 54 most recent closed 15-minute candles. To ensure only fully closed candles are returned, the request computes an <code>endTime</code> parameter set to one millisecond before the start of the current 15-minute block. This avoids acting on incomplete price information.</p>
+
+                <h2>Feature Engineering</h2>
+
+                <h3>Technical Indicators</h3>
+                <p>From each raw OHLCV candle, 15 technical indicators are computed. These were selected to capture complementary dimensions of market state: trend direction, momentum, volatility, and volume flow.</p>
+
+                <table class="indicator-table">
+                    <thead>
+                        <tr><th>#</th><th>Indicator</th><th>Category</th><th>Window</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>RSI</td><td>Momentum</td><td>14</td></tr>
+                        <tr><td>2</td><td>WMA</td><td>Trend</td><td>9</td></tr>
+                        <tr><td>3</td><td>EMA</td><td>Trend</td><td>14</td></tr>
+                        <tr><td>4</td><td>SMA</td><td>Trend</td><td>14</td></tr>
+                        <tr><td>5</td><td>HMA (Hull Moving Average)</td><td>Trend</td><td>16</td></tr>
+                        <tr><td>6</td><td>TEMA (Triple EMA)</td><td>Trend</td><td>14</td></tr>
+                        <tr><td>7</td><td>CCI</td><td>Trend</td><td>20</td></tr>
+                        <tr><td>8</td><td>MACD</td><td>Trend</td><td>26/12</td></tr>
+                        <tr><td>9</td><td>PPO</td><td>Momentum</td><td>26/12</td></tr>
+                        <tr><td>10</td><td>ROC</td><td>Momentum</td><td>12</td></tr>
+                        <tr><td>11</td><td>ADX</td><td>Trend</td><td>14</td></tr>
+                        <tr><td>12</td><td>Parabolic SAR</td><td>Trend</td><td>—</td></tr>
+                        <tr><td>13</td><td>Williams %R</td><td>Momentum</td><td>14</td></tr>
+                        <tr><td>14</td><td>CMF (Chaikin Money Flow)</td><td>Volume</td><td>21</td></tr>
+                        <tr><td>15</td><td>CMO (Chande Momentum)</td><td>Momentum</td><td>14</td></tr>
+                    </tbody>
+                </table>
+
+                <p>The HMA and TEMA are not available directly in the <code>ta</code> library. They are computed from primitive operations: HMA uses a composition of WMA at different periods (<code>WMA(2&middot;WMA(n/2) - WMA(n), sqrt(n))</code>), and TEMA uses triple recursion of EMA (<code>3&middot;EMA - 3&middot;EMA(EMA) + EMA(EMA(EMA))</code>). Williams %R, CMF, and CMO are also implemented manually to handle edge cases (division by zero replaced with NaN, then dropped).</p>
+
+                <h3>Labelling Strategy</h3>
+                <p>Labels are assigned using a centered rolling window of size 11 on the close prices. The logic is deterministic:</p>
+
+                <table class="label-table">
+                    <thead>
+                        <tr><th>Condition</th><th>Label</th><th>Interpretation</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Close at center = window max</td><td>2</td><td>Local peak</td></tr>
+                        <tr><td>Close at center = window min</td><td>1</td><td>Local trough</td></tr>
+                        <tr><td>Otherwise</td><td>0</td><td>Neutral</td></tr>
+                    </tbody>
+                </table>
+
+                <p>This approach identifies exact turning points in the price series. The centered window means labels cannot be computed for the most recent 5 candles, which is acceptable since labelling is only used for training, not inference.</p>
+
+                <h3>Normalization</h3>
+                <p>All 15 indicator columns are scaled to the range [-1, 1] using a <code>MinMaxScaler</code> fitted exclusively on the training set. This scaler is serialized with <code>joblib</code> and reused during validation, backtesting, and live inference to prevent data leakage.</p>
+
+                <h2>Image Construction</h2>
+                <p>After normalization, the data is sliced into overlapping windows of 15 consecutive rows. Each window produces a matrix of shape (15, 15) — 15 time steps &times; 15 features — which is treated as a single-channel grayscale image.</p>
+                <p>Each pixel encodes the normalized value of one indicator at one time step. Spatial coherence is exploited by the CNN: vertically, the network can detect temporal patterns in individual indicators; horizontally, it can detect correlations across indicators at a given moment.</p>
+
+                <figure class="project-figure">
+                    <img src="image/image_ex.png" alt="Example of a 15x15 matrix image fed to the CNN">
+                    <figcaption><strong>Figure 1.</strong> Example of a 15&times;15 input matrix visualized as a grayscale heatmap. The x-axis represents the 15 technical indicators, and the y-axis represents 15 consecutive time steps. Values range from -1 (black) to +1 (white). The vertical gradient patterns reveal temporal trends in individual indicators, while horizontal patterns capture cross-indicator structure at a given moment.</figcaption>
+                </figure>
+
+                <p>For training, each matrix is paired with the label of its final (15th) row. For live inference, a single matrix is generated from the 15 most recent rows of the 54-candle fetch (the first ~39 candles are consumed by the indicator warm-up periods).</p>
+
+                <h2>CNN Architecture</h2>
+                <p>The model, <code>PriceCNN</code>, is a compact convolutional network designed for the small 15&times;15 input size:</p>
+
+<pre><code>Input: [batch, 1, 15, 15]
+  → Conv2d(1, 32, kernel=3, padding=1)   → ReLU
+  → Conv2d(32, 64, kernel=3, padding=1)  → ReLU
+  → MaxPool2d(2)                          → 64 × 7 × 7
+  → Dropout(0.25)
+  → Flatten                               → 3136
+  → Linear(3136, 128)                     → ReLU
+  → Dropout(0.5)
+  → Linear(128, 3)
+Output: 3 logits (HOLD, SELL, BUY)</code></pre>
+
+                <p>Design choices:</p>
+                <ul>
+                    <li><strong>Padding=1 on 3&times;3 convolutions</strong> preserves spatial dimensions before pooling, allowing the two convolutional layers to operate at full resolution.</li>
+                    <li><strong>MaxPool2d(2)</strong> reduces the 15&times;15 feature maps to 7&times;7 (floor division), producing a 3136-dimensional flattened vector.</li>
+                    <li><strong>Two dropout layers</strong> (0.25 post-convolution, 0.5 pre-classifier) serve as regularization given the relatively small dataset.</li>
+                    <li><strong>No batch normalization</strong> — the MinMaxScaler normalization provides stable input distributions.</li>
+                </ul>
+
+                <h2>Training Procedure</h2>
+
+                <h3>Class Imbalance Handling</h3>
+                <p>The neutral class (label 0) is heavily over-represented in the data since most candles are neither local peaks nor troughs. To counteract this, the <code>CrossEntropyLoss</code> is configured with inverse-frequency class weights:</p>
+
+<pre><code>counts = np.bincount(labels, minlength=3)
+weights = counts.sum() / (len(counts) * counts)
+weights = weights / weights.mean()  # normalize to mean=1
+criterion = nn.CrossEntropyLoss(weight=class_weights)</code></pre>
+
+                <p>This ensures that errors on minority classes (peaks and troughs) are penalized proportionally more during backpropagation.</p>
+
+                <h3>Optimizer and Scheduling</h3>
+                <ul>
+                    <li><strong>AdamW</strong> with weight decay of 1e-4 for L2 regularization</li>
+                    <li><strong>ReduceLROnPlateau</strong> scheduler: reduces learning rate by factor 0.5 after 2 epochs without validation loss improvement, with a floor at 1e-5</li>
+                    <li><strong>Early stopping</strong>: training halts after 5-7 epochs without improvement (patience depends on dataset size)</li>
+                </ul>
+
+                <h3>Automatic Hyperparameter Configuration</h3>
+                <p>A configuration function adapts batch size, learning rate, epoch budget, and early stopping patience based on the training set size:</p>
+
+                <table class="indicator-table">
+                    <thead>
+                        <tr><th>Train size</th><th>Batch size</th><th>Learning rate</th><th>Max epochs</th><th>Patience</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>&lt; 3,000</td><td>32</td><td>5e-4</td><td>45</td><td>7</td></tr>
+                        <tr><td>3,000 – 10,000</td><td>64</td><td>8e-4</td><td>35</td><td>6</td></tr>
+                        <tr><td>&gt; 10,000</td><td>128</td><td>1e-3</td><td>30</td><td>5</td></tr>
+                    </tbody>
+                </table>
+
+                <p>On CPU, batch size is capped at 64 to avoid slowdowns from memory pressure.</p>
+
+                <h3>Data Split</h3>
+                <p>The training set spans September 2024 to January 2026. The validation set covers January 10 to February 10, 2026. This temporal split ensures no future information leaks into training. The best model checkpoint is selected by validation loss, with validation accuracy as a secondary criterion.</p>
+
+                <h2>Trading Strategy</h2>
+                <p>The implemented strategy is momentum-based. The interpretation of the labels is inverted from what a naive reading might suggest:</p>
+                <ul>
+                    <li><strong>Label 2 (local peak detected)</strong> → BUY: the model identifies a strong recent upward move, interpreted as momentum that will continue.</li>
+                    <li><strong>Label 1 (local trough detected)</strong> → SELL: the model identifies a strong recent downward move, interpreted as bearish momentum.</li>
+                    <li><strong>Label 0 (neutral)</strong> → HOLD: no action taken.</li>
+                </ul>
+                <p>The system maintains a binary state: it is either fully in USD or fully in BTC. A BUY signal when already holding BTC is ignored, and vice versa. Transaction fees of 0.1% are applied on every trade.</p>
+
+                <h2>Live Pipeline</h2>
+                <p>The production loop executes every 15 minutes with the following steps:</p>
+                <ul>
+                    <li>Wait until the clock reaches a multiple of 15 minutes</li>
+                    <li>Fetch 54 closed candles from the Binance public API</li>
+                    <li>Compare with the last processed set to avoid duplicate signals</li>
+                    <li>Compute indicators, normalize, and extract the final 15&times;15 matrix</li>
+                    <li>Run inference through the loaded CNN model</li>
+                    <li>If BUY or SELL: place a market order via the Binance authenticated API</li>
+                </ul>
+                <p>Two trading modules exist: a testnet version for paper trading (<code>place_order_demo.py</code>) and a production version (<code>place_order.py</code>) that includes exchange filter validation (lot size, step size, minimum notional), quantity normalization, and structured error handling. API keys are loaded from environment variables via <code>python-dotenv</code>.</p>
+
+                <h2>Backtesting</h2>
+
+                <h3>Sliding Window Backtest</h3>
+                <p>The most realistic backtest (<code>financial_analysis2.py</code>) replicates the live pipeline exactly: for each iteration, it takes a fresh window of 54 candles, generates a single image, runs the prediction, and executes at the open price of the next candle. This avoids look-ahead bias that would occur with pre-computing all images from a single normalized dataset.</p>
+
+                <figure class="project-figure">
+                    <img src="image/PnL.png" alt="Backtest results: Strategy vs Buy and Hold with sliding window">
+                    <figcaption><strong>Figure 2.</strong> Backtest on BTCUSDT 15-minute candles (March 25–29, 2026) with a $200 initial capital. The blue line represents the CNN momentum strategy; the orange line represents a Buy &amp; Hold baseline. The strategy reduces drawdown compared to Buy &amp; Hold during this bearish period, declining from $200 to ~$187 while B&amp;H drops to ~$186. The stepped pattern of the strategy curve reflects the binary in/out-of-market state.</figcaption>
+                </figure>
+
+                <p>The backtest benchmark is a simple Buy &amp; Hold: the entire capital is converted to BTC at the first candle's close price, and its value is tracked over time. Both strategies include 0.1% fees.</p>
+
+                <h2>Real-Time Simulation Results</h2>
+                <p>The system was deployed in a real-time simulation (no actual orders, but using live Binance data) from March 24 to March 29, 2026. Decisions and portfolio values were logged every 15 minutes to a CSV file.</p>
+
+                <figure class="project-figure">
+                    <img src="image/PnL_real_data.png" alt="Real-time simulation results showing portfolio decline">
+                    <figcaption><strong>Figure 3.</strong> Portfolio evolution during 5 days of real-time simulation on live BTCUSDT data. Starting capital: $200. Final value: ~$185. The staircase pattern corresponds to alternating holding periods (flat segments) and trades. The overall downward trend indicates the strategy is not profitable on this out-of-sample period.</figcaption>
+                </figure>
+
+                <p>Key observations from the real-time data:</p>
+                <ul>
+                    <li>Over 400 decisions were logged across 5 days</li>
+                    <li>The vast majority of predictions are HOLD (consistent with the label distribution)</li>
+                    <li>Approximately 30 round-trip trades were executed</li>
+                    <li>The portfolio declined from $200 to ~$185, a loss of approximately 7.5%</li>
+                    <li>Most trades are small losers: the momentum interpretation does not capture sufficient directional edge after fees</li>
+                </ul>
+
+                <h2>Limitations and Analysis</h2>
+                <ul>
+                    <li><strong>Labelling granularity</strong>: the rolling window approach identifies exact turning points, but price series are noisy at 15-minute resolution. The model must distinguish local peaks from random fluctuations — a task where even small prediction errors compound through fees.</li>
+                    <li><strong>Momentum interpretation</strong>: using a peak detection label as a momentum-continuation signal is a hypothesis. In practice, a detected peak often marks the end of a move rather than its midpoint, leading to systematic late entries.</li>
+                    <li><strong>Class imbalance</strong>: despite weighting, label 0 dominates, and the model tends toward conservative HOLD predictions. This reduces the number of trades but also limits the strategy's ability to capture any directional edge.</li>
+                    <li><strong>No position sizing or risk management</strong>: the system is all-in or all-out, with no stop-loss, no partial positions, and no volatility-adjusted sizing.</li>
+                    <li><strong>Single asset and timeframe</strong>: the system is optimized for one pair at one resolution, making it vulnerable to regime changes specific to BTCUSDT 15-minute dynamics.</li>
+                    <li><strong>Normalization drift</strong>: the MinMaxScaler is fitted on historical data. If the indicator distributions shift (e.g., during a volatility spike), pixel values may saturate at the [-1, 1] boundaries, degrading image quality.</li>
+                </ul>
+
+                <h2>Potential Improvements</h2>
+                <ul>
+                    <li><strong>Alternative labelling</strong>: replace peak/trough detection with forward-return thresholds (e.g., classify based on whether the next N candles' return exceeds transaction costs), making the signal directly actionable.</li>
+                    <li><strong>Multi-channel images</strong>: add OHLCV channels alongside indicator channels to give the CNN access to raw price structure.</li>
+                    <li><strong>Deeper architectures</strong>: experiment with residual connections or attention mechanisms to capture longer-range temporal dependencies within the 15-step window.</li>
+                    <li><strong>Online retraining</strong>: periodically refit the model and scaler on recent data to adapt to changing market regimes.</li>
+                    <li><strong>Risk management layer</strong>: add position sizing based on prediction confidence (softmax entropy), stop-losses, and maximum drawdown constraints.</li>
+                    <li><strong>Walk-forward optimization</strong>: implement a rolling train/validate/test framework to measure true out-of-sample performance across multiple market regimes.</li>
+                </ul>
+
+                <h2>Technical Stack</h2>
+                <ul>
+                    <li><strong>Deep Learning</strong>: PyTorch (model definition, training loop, inference)</li>
+                    <li><strong>Data</strong>: pandas, NumPy, SQLAlchemy, MySQL</li>
+                    <li><strong>Feature Engineering</strong>: ta (Technical Analysis library), custom implementations for HMA, TEMA, Williams %R, CMF, CMO</li>
+                    <li><strong>Preprocessing</strong>: scikit-learn (MinMaxScaler), joblib (serialization)</li>
+                    <li><strong>API Integration</strong>: python-binance (historical data), requests (real-time REST API, order execution)</li>
+                    <li><strong>Security</strong>: python-dotenv for credential management, HMAC-SHA256 request signing</li>
+                </ul>
+
+                <h2>References</h2>
+                <p>The image-based approach to financial time series classification is inspired by:</p>
+                <ul>
+                    <li>Sezer, O. B., &amp; Ozbayoglu, A. M. — <em>Algorithmic Financial Trading with Deep Convolutional Neural Networks: Time Series to Image Conversion Approach</em> (Preprint). This paper proposes converting technical indicators into 2D images for CNN classification. The present implementation adapts this idea with a different indicator set, labelling logic, and trading strategy.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="footer-name">Colin Mattéo</p>
+                    <p class="footer-email"><a href="mailto:matteo.colin@telecom-paris.fr">matteo.colin@telecom-paris.fr</a></p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/V0H6P" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://www.linkedin.com/in/mattéo-colin-82a244336" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Colin. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
