@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Arbitrage — Pair Trading — Colin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .project-page {
+            padding-top: calc(52px + 5rem);
+            padding-bottom: var(--space-2xl);
+        }
+
+        .project-header {
+            margin-bottom: var(--space-lg);
+        }
+
+        .project-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 14px;
+            color: var(--color-gray-500);
+            margin-bottom: 2rem;
+            transition: color var(--transition-fast);
+        }
+
+        .project-back:hover {
+            color: var(--color-black);
+        }
+
+        .project-back svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .project-page-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+        }
+
+        .project-page-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-page-date {
+            font-size: 14px;
+            color: var(--color-gray-500);
+        }
+
+        .project-page-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .project-body {
+            max-width: var(--max-width-narrow);
+        }
+
+        .project-body h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-black);
+        }
+
+        .project-body h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-black);
+        }
+
+        .project-body p {
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-gray-700);
+            margin-bottom: 1.25rem;
+        }
+
+        .project-body ul {
+            list-style: none;
+            margin-bottom: 1.25rem;
+            padding-left: 0;
+        }
+
+        .project-body li {
+            font-size: 1.0625rem;
+            line-height: 1.75;
+            color: var(--color-gray-700);
+            padding-left: 1.25rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-body li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.75em;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: var(--color-gray-300);
+        }
+
+        .project-body code {
+            font-family: var(--font-mono);
+            font-size: 0.875em;
+            background-color: var(--color-gray-100);
+            padding: 0.15em 0.4em;
+            border-radius: 4px;
+        }
+
+        .project-body pre {
+            background-color: var(--color-gray-100);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .project-figure {
+            margin: 2rem 0;
+        }
+
+        .project-figure img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid var(--color-gray-200);
+        }
+
+        .project-figure figcaption {
+            font-size: 0.9rem;
+            color: var(--color-gray-500);
+            margin-top: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .indicator-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .indicator-table th,
+        .indicator-table td {
+            padding: 0.6rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .indicator-table th {
+            font-weight: 600;
+            color: var(--color-black);
+            background-color: var(--color-gray-100);
+        }
+
+        .indicator-table td {
+            color: var(--color-gray-700);
+        }
+
+        .label-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .label-table th,
+        .label-table td {
+            padding: 0.6rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid var(--color-gray-200);
+        }
+
+        .label-table th {
+            font-weight: 600;
+            color: var(--color-black);
+            background-color: var(--color-gray-100);
+        }
+
+        .label-table td {
+            color: var(--color-gray-700);
+        }
+
+        .math-block {
+            background-color: var(--color-gray-100);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <nav class="nav" aria-label="Main navigation">
+            <div class="nav-left">
+                <a href="../index.html" class="nav-name">Colin Mattéo</a>
+                <a href="../index.html#about" class="nav-link">About</a>
+                <a href="../projects.html" class="nav-link">Projects</a>
+                <a href="../index.html#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-right">
+                <a href="../assets/CV_Matteo_Colin.pdf" class="nav-link" target="_blank" rel="noopener noreferrer">CV</a>
+                <a href="https://github.com/V0H6P" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/mattéo-colin-82a244336" class="nav-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="project-page">
+        <div class="container container--narrow">
+            <a href="../projects.html" class="project-back">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Projects
+            </a>
+
+            <header class="project-header">
+                <h1 class="project-page-title">Statistical Arbitrage &mdash; Pair Trading with Ornstein-Uhlenbeck Modelling</h1>
+                <div class="project-page-meta">
+                    <span class="project-page-date">July 2025</span>
+                </div>
+                <div class="project-page-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Statistical Testing</span>
+                    <span class="tech-tag">Cointegration</span>
+                    <span class="tech-tag">Ornstein-Uhlenbeck</span>
+                    <span class="tech-tag">Pair Trading</span>
+                    <span class="tech-tag">Backtesting</span>
+                </div>
+            </header>
+
+            <div class="project-body">
+                <h2>Project Overview</h2>
+                <p>This project implements a complete statistical arbitrage pipeline based on pair trading. The core hypothesis is that certain pairs of equities share a long-run equilibrium relationship (cointegration), and that temporary deviations from this equilibrium &mdash; captured by the spread &mdash; can be modelled as a mean-reverting stochastic process (Ornstein-Uhlenbeck). Trading signals are generated when the spread deviates significantly from its long-term mean, and positions are closed when it reverts.</p>
+                <p>The pipeline covers: economic pre-filtering of candidate pairs, battery of statistical tests for cointegration validation, spread construction via the Johansen procedure, OU parameter estimation by OLS regression, signal generation through a state-machine architecture, and out-of-sample backtesting with capital simulation.</p>
+
+                <h2>Data Acquisition and Universe Definition</h2>
+
+                <h3>Candidate Pair Selection</h3>
+                <p>The universe of candidate pairs is defined in <code>pairs_universe.csv</code>, a manually curated list of 30+ equity pairs selected on economic grounds. Each pair is justified by a fundamental relationship: direct competitors (KO/PEP, HD/LOW), same macro driver (CAT/DE, XOM/CVX), payment networks (V/MA), or sector exposure (LMT/RTX, UNH/ELV). This economic pre-filter ensures that any statistical relationship detected has a plausible structural explanation, reducing the risk of spurious cointegration.</p>
+
+                <h3>Historical Data</h3>
+                <p>Price data is downloaded from Yahoo Finance via the <code>yfinance</code> library. The training period spans January 2010 to January 2024 (approximately 14 years of daily close prices). Data is cached locally in <code>financial_datas.csv</code> to avoid repeated downloads. A separate out-of-sample dataset covering January 2024 to July 2026 is stored in <code>backtest_datas.csv</code> for backtesting purposes. Missing values between tickers are handled by aligning on the intersection of available dates (<code>dropna</code> on the concatenated DataFrame).</p>
+
+                <h2>Statistical Testing Pipeline</h2>
+                <p>The cointegration verification is implemented in <code>test_coint.py</code> as a class <code>Coint_verif</code> that runs a battery of five sequential tests. Each test acts as a filter: if a pair fails any test, it is immediately rejected via a custom <code>CointError</code> exception. The method <code>test_batterie()</code> chains all tests in order.</p>
+
+                <h3>Step 1: Integration Order Verification (ADF)</h3>
+                <p>The first requirement for cointegration is that both price series are individually integrated of order 1, denoted I(1). This means the raw series is non-stationary, but its first difference is stationary. The implementation uses the Augmented Dickey-Fuller test from <code>statsmodels</code>:</p>
+                <ul>
+                    <li>Test that the raw series fails to reject H₀ (unit root present) at the 5% level &mdash; confirming non-stationarity.</li>
+                    <li>Test that the first-differenced series rejects H₀ at the 5% level &mdash; confirming stationarity of returns.</li>
+                </ul>
+                <p>Both conditions must hold for both assets in the pair. If either series is already stationary in levels, or if the first difference is not stationary, the pair is discarded.</p>
+
+                <h3>Step 2: Spread Construction via Johansen</h3>
+                <p>The hedge ratio and spread are estimated using the Johansen cointegration procedure (<code>coint_johansen</code> from <code>statsmodels</code>). This method solves a generalized eigenvalue problem on the VECM representation of the bivariate system. The implementation extracts the eigenvector associated with the largest eigenvalue, normalizes it so that the coefficient on the first asset equals 1, and constructs the spread as:</p>
+                <div class="math-block">spread(t) = price_A(t) + v[1] &times; price_B(t)</div>
+                <p>where <code>v[1]</code> is the normalized second component (typically negative, yielding spread = A &minus; &beta;&middot;B). The Johansen approach is preferred over OLS because it is symmetric &mdash; the result does not depend on which variable is designated as dependent &mdash; and because it simultaneously provides a test of cointegration rank.</p>
+
+                <h3>Step 3: Spread Stationarity Verification</h3>
+                <p>Once the spread is constructed, its stationarity is verified through three independent tests, each with different null hypotheses and power characteristics:</p>
+                <table class="indicator-table">
+                    <thead>
+                        <tr><th>Test</th><th>H₀</th><th>Rejection condition</th><th>Rationale</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>ADF</td><td>Unit root (non-stationary)</td><td>stat &lt; critical value</td><td>Standard unit root test</td></tr>
+                        <tr><td>KPSS</td><td>Stationary</td><td>stat &gt; critical value</td><td>Complementary: tests opposite hypothesis</td></tr>
+                        <tr><td>Phillips-Perron</td><td>Unit root (non-stationary)</td><td>stat &lt; critical value</td><td>Robust to heteroscedasticity and serial correlation</td></tr>
+                    </tbody>
+                </table>
+                <p>Using both ADF/PP (H₀: non-stationary) and KPSS (H₀: stationary) provides a confirmatory approach: the spread must simultaneously reject non-stationarity under ADF/PP and fail to reject stationarity under KPSS. This reduces the probability of Type I errors from any single test.</p>
+
+                <h3>Step 4: Formal Cointegration Tests</h3>
+                <p>Two formal cointegration tests validate the relationship:</p>
+                <ul>
+                    <li><strong>Engle-Granger</strong>: tests whether the residuals of the cointegrating regression have a unit root. The pair is rejected if the test statistic exceeds the critical value at 5%, or if the p-value exceeds 0.05.</li>
+                    <li><strong>Johansen trace test</strong>: the trace statistic for rank r=0 must exceed the 95% critical value, rejecting the null of no cointegration relationship.</li>
+                </ul>
+
+                <h3>Step 5: Hurst Exponent</h3>
+                <p>As a final confirmation of mean-reversion, the Hurst exponent is computed on the spread using the R/S (rescaled range) method via the <code>hurst</code> library. A Hurst exponent H &lt; 0.5 indicates mean-reverting behaviour. H = 0.5 corresponds to a random walk, and H &gt; 0.5 indicates trending behaviour. Pairs with H &ge; 0.5 are rejected.</p>
+
+                <h3>Results of the Screening</h3>
+                <p>From the initial universe of 30+ candidate pairs, the statistical pipeline identifies 8 cointegrated pairs:</p>
+                <table class="indicator-table">
+                    <thead>
+                        <tr><th>Pair</th><th>Sector</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>UNH &ndash; ELV</td><td>Health Insurance</td></tr>
+                        <tr><td>TMO &ndash; DHR</td><td>Life Sciences</td></tr>
+                        <tr><td>ALL &ndash; TRV</td><td>Insurance</td></tr>
+                        <tr><td>DE &ndash; AGCO</td><td>Agricultural Equipment</td></tr>
+                        <tr><td>SNPS &ndash; CDNS</td><td>EDA Software</td></tr>
+                        <tr><td>ADP &ndash; PAYX</td><td>Payroll Services</td></tr>
+                        <tr><td>EMR &ndash; ROK</td><td>Industrial Automation</td></tr>
+                        <tr><td>VRSK &ndash; MCO</td><td>Data Analytics / Risk</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Ornstein-Uhlenbeck Parameter Estimation</h2>
+
+                <h3>Model Definition</h3>
+                <p>The spread is modelled as a continuous-time Ornstein-Uhlenbeck process:</p>
+                <div class="math-block">dX(t) = &theta;(&mu; &minus; X(t))dt + &sigma; dW(t)</div>
+                <p>where &theta; is the mean-reversion speed, &mu; is the long-run mean, and &sigma; is the diffusion coefficient. The exact discretization for observations at uniform intervals &Delta;t yields an AR(1) process:</p>
+                <div class="math-block">X(t+1) = a&middot;X(t) + b + &epsilon;(t),&emsp; a = e^(&minus;&theta;&Delta;t),&emsp; b = &mu;(1&minus;a)</div>
+
+                <h3>Estimation Method (OLS)</h3>
+                <p>The <code>OUEstimator</code> class in <code>fit_ou_model.py</code> implements estimation by OLS regression on the discretized form. The procedure:</p>
+                <ul>
+                    <li>Regress X(t+1) on [1, X(t)] to obtain the intercept b&#x302; and slope a&#x302;.</li>
+                    <li>Verify that 0 &lt; a&#x302; &lt; 1 (necessary condition for mean-reversion). If violated, the model raises a <code>ValueError</code>.</li>
+                    <li>Convert back to continuous-time parameters: &theta; = &minus;ln(a&#x302;)/&Delta;t, &mu; = b&#x302;/(1&minus;a&#x302;).</li>
+                    <li>Estimate &sigma; from the residual variance: &sigma;² = &sigma;²(&epsilon;)&middot;(&minus;2ln(a&#x302;)) / (&Delta;t&middot;(1&minus;a&#x302;²)).</li>
+                </ul>
+
+                <h3>Derived Quantities</h3>
+                <p>The estimator computes several quantities used downstream:</p>
+                <ul>
+                    <li><strong>Half-life</strong>: t½ = ln(2)/&theta; &mdash; the expected time for the spread to revert halfway to &mu;. This determines the holding horizon and influences the choice of trading parameters.</li>
+                    <li><strong>Stationary variance</strong>: &sigma;²/(2&theta;) &mdash; the long-run variance of the spread under the OU model.</li>
+                    <li><strong>Stationary standard deviation</strong>: used to normalize the z-score for signal generation.</li>
+                </ul>
+
+                <h3>Diagnostic Tests</h3>
+                <p>The estimator provides model diagnostics on the standardized residuals:</p>
+                <ul>
+                    <li><strong>Jarque-Bera</strong>: tests for normality of residuals (OU assumes Gaussian noise).</li>
+                    <li><strong>Ljung-Box</strong>: tests for remaining autocorrelation (AR(1) residuals should be white noise).</li>
+                    <li><strong>ARCH-LM</strong>: tests for conditional heteroscedasticity (OU assumes constant volatility).</li>
+                </ul>
+                <p>Confidence intervals for &theta; and &mu; are computed via asymptotic standard errors and delta-method propagation from the AR(1) coefficients.</p>
+
+                <h3>Pair Filtering by Half-Life and Volatility</h3>
+                <p>After OU estimation on all 8 cointegrated pairs, a second filter is applied based on tradability criteria. Pairs are retained if they exhibit a half-life short enough for practical trading and sufficient spread volatility to generate profit after transaction costs. The final selection retains 4 pairs:</p>
+                <table class="indicator-table">
+                    <thead>
+                        <tr><th>Pair</th><th>Half-life (days)</th><th>&theta;</th><th>&sigma;</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>UNH &ndash; ELV</td><td>55</td><td>0.0126</td><td>2.70</td></tr>
+                        <tr><td>TMO &ndash; DHR</td><td>69</td><td>0.0101</td><td>3.11</td></tr>
+                        <tr><td>DE &ndash; AGCO</td><td>49</td><td>0.0143</td><td>3.61</td></tr>
+                        <tr><td>SNPS &ndash; CDNS</td><td>25</td><td>0.0274</td><td>1.72</td></tr>
+                    </tbody>
+                </table>
+                <p>Pairs with half-lives exceeding 80 days (ALL&ndash;TRV, ADP&ndash;PAYX, EMR&ndash;ROK, VRSK&ndash;MCO) or insufficient volatility are discarded, as they would require excessively long holding periods relative to the risk of regime change.</p>
+
+                <h2>Signal Generation</h2>
+
+                <h3>Z-Score Based State Machine</h3>
+                <p>The trading logic is implemented in <code>Pair_trading_strat.py</code> as a class <code>Strategie</code>. Signal generation is modelled as a finite state machine with three states: flat (0), long spread (+1), and short spread (&minus;1). The z-score is computed as:</p>
+                <div class="math-block">z(t) = (spread(t) &minus; &mu;) / &sigma;_stationary</div>
+                <p>where &mu; and &sigma;_stationary are the OU parameters estimated on the training period.</p>
+
+                <h3>Entry and Exit Rules</h3>
+                <table class="indicator-table">
+                    <thead>
+                        <tr><th>Condition</th><th>Action</th><th>Default threshold</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>z &gt; k_entry (from flat)</td><td>Short the spread</td><td>k_entry = 2.0</td></tr>
+                        <tr><td>z &lt; &minus;k_entry (from flat)</td><td>Long the spread</td><td>k_entry = 2.0</td></tr>
+                        <tr><td>z crosses &minus;k_exit (from long)</td><td>Close long position</td><td>k_exit = 0.2</td></tr>
+                        <tr><td>z crosses k_exit (from short)</td><td>Close short position</td><td>k_exit = 0.2</td></tr>
+                        <tr><td>|z| &gt; stop_loss (from any position)</td><td>Close position (stop-loss)</td><td>stop_loss = 3.0</td></tr>
+                        <tr><td>Holding days &gt; max_holding</td><td>Close position (time stop)</td><td>Optional (None)</td></tr>
+                    </tbody>
+                </table>
+                <p>The state machine ensures that transitions are well-defined: entry only occurs from the flat state, and exit conditions are checked only when a position is active. The stop-loss protects against structural breaks in the cointegration relationship (the spread may diverge permanently if the regime changes).</p>
+
+                <h2>Backtesting</h2>
+
+                <h3>Methodology</h3>
+                <p>The backtest uses an out-of-sample period (January 2024 &ndash; July 2026) that is strictly posterior to the training data (2010&ndash;2024). The hedge ratio and OU parameters are estimated on the training period and held fixed throughout the backtest &mdash; no re-estimation or look-ahead occurs.</p>
+                <p>Two backtesting modes are implemented:</p>
+
+                <h3>Mode 1: Spread-Level PnL</h3>
+                <p>The <code>backtest()</code> method computes the PnL directly from the spread movements. At each time step, the position (long, short, or flat) multiplies the daily change in spread value. Transaction costs (default: 30 bps) are applied proportionally to the absolute spread value at each trade. The method returns:</p>
+                <ul>
+                    <li><strong>Cumulative PnL</strong>: running sum of daily net returns.</li>
+                    <li><strong>Sharpe ratio</strong>: annualized (×&radic;252), computed only on active days.</li>
+                    <li><strong>Maximum drawdown</strong>: largest peak-to-trough decline in cumulative PnL.</li>
+                    <li><strong>Number of trades</strong>: round-trip count.</li>
+                    <li><strong>Win rate</strong>: proportion of positive daily returns on active days.</li>
+                </ul>
+
+                <h3>Mode 2: Capital Simulation</h3>
+                <p>The <code>simulate_capital()</code> method implements a more realistic simulation with explicit capital allocation. Given an initial capital (default: $10,000) and a risk fraction per trade (parameter <code>f</code>), the method tracks:</p>
+                <ul>
+                    <li>The number of shares of asset A and B held at each time step.</li>
+                    <li>Available liquidity after position entries and exits.</li>
+                    <li>Total portfolio value (patrimoine) accounting for mark-to-market positions.</li>
+                </ul>
+                <p>When going long the spread (buy A, short B), the system allocates f&times;liquidity to asset A and hedge&times;f&times;liquidity to the short position in B. The reverse allocation applies for short spread positions. Position closing rebalances back to fully liquid.</p>
+
+                <figure class="project-figure">
+                    <img src="image_rapport/PnL_UNH-ELV.png" alt="Cumulative PnL for UNH-ELV pair">
+                    <figcaption><strong>Figure 1.</strong> Cumulative PnL (spread-level) for the UNH&ndash;ELV pair over the out-of-sample period (Jan 2024 &ndash; Jul 2026). The strategy uses default parameters (k_entry=2, k_exit=0.2, stop_loss=3) with OU parameters estimated on 2010&ndash;2024 data. The upward trend indicates that mean-reversion signals on this pair generated positive returns in the backtest period.</figcaption>
+                </figure>
+
+                <figure class="project-figure">
+                    <img src="image_rapport/PnL_UNH-ELV_10000_init.png" alt="Capital simulation for UNH-ELV pair with $10,000 initial">
+                    <figcaption><strong>Figure 2.</strong> Capital evolution for the UNH&ndash;ELV pair with $10,000 initial capital and 50% risk per trade. The simulation tracks explicit share quantities and mark-to-market portfolio value. The staircase pattern reflects periods of active positions (where capital fluctuates with prices) separated by flat periods (cash-only, waiting for entry signals).</figcaption>
+                </figure>
+
+                <figure class="project-figure">
+                    <img src="image_rapport/PnL_PNO-DHR.png" alt="Cumulative PnL for a pair showing negative performance">
+                    <figcaption><strong>Figure 3.</strong> Cumulative PnL for another pair over the same out-of-sample period. Unlike UNH&ndash;ELV, this pair generates a negative cumulative PnL, suggesting that the cointegration relationship estimated on historical data broke down during the backtest period. This illustrates the regime-change risk inherent to pair trading strategies.</figcaption>
+                </figure>
+
+                <h2>Architecture and Code Organization</h2>
+
+                <table class="indicator-table">
+                    <thead>
+                        <tr><th>File</th><th>Role</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>pairs_universe.csv</code></td><td>Economic pre-filter: curated list of candidate pairs with fundamental justification</td></tr>
+                        <tr><td><code>test_coint.py</code></td><td>Statistical testing module: <code>Coint_verif</code> class implementing the 5-test battery</td></tr>
+                        <tr><td><code>fit_ou_model.py</code></td><td>OU estimation module: <code>OUEstimator</code> class with OLS fit, diagnostics, and confidence intervals</td></tr>
+                        <tr><td><code>Pair_trading_strat.py</code></td><td>Strategy module: <code>Strategie</code> class with signal generation, backtest, and capital simulation</td></tr>
+                        <tr><td><code>test_pair.ipynb</code></td><td>Orchestration notebook: runs the full pipeline from data loading to backtest visualization</td></tr>
+                        <tr><td><code>financial_datas.csv</code></td><td>Cached training data (2010&ndash;2024)</td></tr>
+                        <tr><td><code>backtest_datas.csv</code></td><td>Cached out-of-sample data (2024&ndash;2026)</td></tr>
+                        <tr><td><code>validation_stat.ipynb</code></td><td>Educational notebook: step-by-step implementation of each statistical test with synthetic data</td></tr>
+                        <tr><td><code>prise_en_main_ou.ipynb</code></td><td>OU process exploration: simulation, convergence to stationary distribution, empirical vs theoretical ACF</td></tr>
+                    </tbody>
+                </table>
+                <p>The modular architecture separates concerns cleanly: statistical testing, OU estimation, and strategy logic are independent classes that can be composed. The orchestration notebook imports all three modules and runs the pipeline sequentially.</p>
+
+                <h2>Performance Summary</h2>
+                <p>Backtesting results vary significantly across pairs. With default parameters (k_entry=2, k_exit=0.2, stop_loss=3) and no parameter optimization:</p>
+                <ul>
+                    <li><strong>UNH&ndash;ELV</strong>: positive cumulative PnL over the out-of-sample period &mdash; the cointegration relationship remains stable and tradable.</li>
+                    <li><strong>TMO&ndash;DHR, DE&ndash;AGCO, SNPS&ndash;CDNS</strong>: negative cumulative PnL &mdash; the relationships broke down or the default parameters are not adapted to these pairs' dynamics.</li>
+                </ul>
+                <p>The capital simulation on UNH&ndash;ELV with $10,000 initial and 50% risk per trade shows the strategy producing returns, though the high risk fraction amplifies both gains and drawdowns.</p>
+
+                <h2>Limitations</h2>
+                <ul>
+                    <li><strong>Static parameters</strong>: the hedge ratio, &mu;, and &sigma; are estimated once on the training set and never updated. In practice, cointegration relationships evolve, and parameters should be re-estimated on a rolling window.</li>
+                    <li><strong>No parameter optimization</strong>: k_entry, k_exit, and stop_loss are set to fixed defaults. No grid search or cross-validation is performed to adapt them per pair.</li>
+                    <li><strong>Constant volatility assumption</strong>: the OU model assumes &sigma; is constant. Financial spreads exhibit time-varying volatility, which the ARCH-LM diagnostic would likely reject on real data.</li>
+                    <li><strong>No regime detection</strong>: the strategy has no mechanism to detect when cointegration has broken down (beyond the stop-loss). A structural break in the relationship leads to systematic losses until the stop-loss triggers.</li>
+                    <li><strong>Transaction cost model</strong>: costs are modelled as proportional to the absolute spread value, which is a simplification. Real costs depend on the notional of each leg, bid-ask spreads, and market impact.</li>
+                    <li><strong>Capital simulation edge cases</strong>: the <code>simulate_capital</code> method uses a variable <code>t</code> in the first time step before it is defined in the loop, which would cause a runtime error for non-zero initial signals (the spread-level backtest works correctly).</li>
+                    <li><strong>Single-pair results</strong>: only UNH&ndash;ELV shows profitability. A production system would require diversification across multiple pairs and adaptive parameter selection.</li>
+                </ul>
+
+                <h2>Potential Improvements</h2>
+                <ul>
+                    <li><strong>Rolling estimation</strong>: re-estimate the hedge ratio and OU parameters on a sliding window (e.g., 2 years) to adapt to evolving relationships.</li>
+                    <li><strong>Kalman filter for dynamic hedge ratio</strong>: replace the static Johansen estimate with a state-space model that continuously updates &beta;.</li>
+                    <li><strong>Parameter optimization</strong>: use walk-forward optimization to select k_entry, k_exit, and stop_loss per pair, maximizing Sharpe ratio or minimizing drawdown on validation periods.</li>
+                    <li><strong>Regime detection</strong>: implement a cointegration stability monitor (e.g., CUSUM test on residuals) to disable trading when the relationship breaks down.</li>
+                    <li><strong>Portfolio construction</strong>: trade multiple pairs simultaneously with capital allocation proportional to signal strength or half-life.</li>
+                    <li><strong>Maximum likelihood estimation</strong>: replace OLS with exact MLE for OU parameters, which provides more efficient estimates on small samples.</li>
+                    <li><strong>Intraday data</strong>: use higher-frequency data to increase the effective sample size for OU estimation, reducing confidence intervals on &theta; and &sigma;.</li>
+                </ul>
+
+                <h2>Technical Stack</h2>
+                <ul>
+                    <li><strong>Core</strong>: Python, NumPy, pandas</li>
+                    <li><strong>Statistical Testing</strong>: statsmodels (ADF, KPSS, Engle-Granger, Johansen), arch (Phillips-Perron), hurst (Hurst exponent)</li>
+                    <li><strong>Data</strong>: yfinance (Yahoo Finance API), CSV persistence</li>
+                    <li><strong>Visualization</strong>: matplotlib</li>
+                    <li><strong>Numerical</strong>: scipy (optimization, statistics)</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p class="footer-name">Colin Mattéo</p>
+                    <p class="footer-email"><a href="mailto:matteo.colin@telecom-paris.fr">matteo.colin@telecom-paris.fr</a></p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/V0H6P" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://www.linkedin.com/in/mattéo-colin-82a244336" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Colin. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
