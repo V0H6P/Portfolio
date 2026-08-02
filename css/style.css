@@ -356,6 +356,23 @@ img {
    ABOUT
    ============================================ */
 
+.about-content::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.about-photo {
+    float: left;
+    width: 180px;
+    height: 180px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: var(--space-md);
+    margin-bottom: var(--space-sm);
+}
+
 .about-content p {
     font-size: 1.0625rem;
     line-height: 1.7;
@@ -367,40 +384,13 @@ img {
     margin-bottom: 0;
 }
 
-.about-wrapper {
-    display: flex;
-    gap: 2.5rem;
-    align-items: flex-start;
-}
-
-.about-photo {
-    flex-shrink: 0;
-    width: 180px;
-}
-
-.about-photo img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 8px; /* mets 50% si tu préfères un cercle */
-    display: block;
-}
-
-.about-content {
-    flex: 1;
-    min-width: 0;
-}
-
 @media (max-width: 640px) {
-    .about-wrapper {
-        flex-direction: column;
-        align-items: center;
-        text-align: left;
-    }
-
     .about-photo {
+        float: none;
+        display: block;
+        margin: 0 auto var(--space-md);
         width: 140px;
+        height: 140px;
     }
 }
 
