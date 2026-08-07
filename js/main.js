@@ -33,4 +33,24 @@
             }
         });
     });
+
+    var toggle = document.querySelector('.nav-toggle');
+    var mobileMenu = document.querySelector('.nav-mobile');
+
+    if (toggle && mobileMenu) {
+        toggle.addEventListener('click', function () {
+            var expanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!expanded));
+            mobileMenu.classList.toggle('open');
+            mobileMenu.setAttribute('aria-hidden', String(expanded));
+        });
+
+        mobileMenu.querySelectorAll('.nav-mobile-link').forEach(function (link) {
+            link.addEventListener('click', function () {
+                toggle.setAttribute('aria-expanded', 'false');
+                mobileMenu.classList.remove('open');
+                mobileMenu.setAttribute('aria-hidden', 'true');
+            });
+        });
+    }
 })();
